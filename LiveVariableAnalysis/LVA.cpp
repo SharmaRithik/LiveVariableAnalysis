@@ -52,6 +52,11 @@ class LVAPass : public FunctionPass {
 			Gen[&I].insert(I.getOperand(0));
 			Gen[&I].insert(I.getOperand(1));
 		}
+		if (BranchInst *BI = dyn_cast<BranchInst>(&I)) {
+			if (BI->isConditional()) {
+				Gen[&I].insert(BI->getCondition());
+			}
+		}
 	}
 	void printGen(Instruction &I) {
 		errs() << "Gen set for: " << I << "\n";
